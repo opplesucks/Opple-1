@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, user-scalable=no" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/vue.min.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		html,body{
+			border:0px;
+			margin:0px;
+			padding:0px;
+			height: 100%;
+			/*安卓字体,苹果字体,微软字体*/
+			font-family: 'Source Han Sans','Noto Sans CJK','PingFang SC','微软雅黑', '黑体','宋体',Arial;
+			font-size: 20px;	
+		}
+		.container{
+			width: 100%;
+			height: 100%;
+			/*background-color:#0f9aef;*/
+			overflow-y: hidden;
+		}
+		/*header*/
+		.header{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+			font-size: 20px;
+			color: #fff;
+			background-color: #0079fe;
+			text-align: center;
+			position: fixed;
+			top: 0;
+		}
+		.header .signtitle{
+			display: inline-block;
+			margin-left: -36px;
+		}
+		.header .fa-angle-left{
+			float: left;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 42px;
+			font-size: 36px;
+			cursor: pointer;
+		}
+		/*主要内容区域*/
+		.main{
+			height: auto;
+			width: 100%;
+			min-height: calc(100vh - 60px);
+			padding-top: 60px;
+		}
+		.main .mainiframe{
+			height: auto;
+			width: 100%;
+			min-height: calc(100vh - 60px);
+		}
+		[v-clock]{
+			display: none;
+		}
+		#vizContainer iframe{
+			margin: 0 auto;
+		}
+	</style>      
+</head>
+<body>
+	<div class="container" id="container" v-clock>
+		<div class="header">
+			<span class="fa fa-angle-left" onclick="window.history.back(-1)"></span>
+			<span class="signtitle">{{reportname|datafilter}}</span>
+			<span class="userinfor"></span>
+		</div>	
+		<div class="main">
+			<iframe class="mainiframe" v-bind:src="reporturl" frameborder="0"></iframe>
+		</div>
+	</div>
+</body>
+<script>
+	//vue 开始构建
+	new Vue({
+		el: '#container',
+		data:{
+			sumorder:[],
+			reporturl:"",
+			reportname:"",
+		},
+		filters:{
+			datafilter:function(value){
+				var backnewval="";
+				var curindex=value.lastIndexOf("电脑版");
+				if(curindex>0){
+					backnewval=value.substring(0,curindex-1);//不只"手机版"三个字
+				}else if(curindex=0){
+					backnewval=value;//只有“手机版”三个字
+				}else{
+					backnewval=value;//没有"手机版"三个字
+				}
+				return backnewval;
+			}
+		},
+		methods:{
+			getsumorder:function(){
+				//菜单
+				var _this=this;
+				var userName=_this.GetQueryString("userName");
+				var view=_this.GetQueryString("view");
+				//var host=_this.GetQueryString("ssoServerUrl");
+				var host="https://obi.opple.com/sso";
+				var userAccount=_this.GetQueryString("userAccount");
+				
+				console.log(userAccount);
+				console.log(encodeURI(userAccount));
+				userAccount=encodeURI(userAccount);
+
+				var reporturl=host+"/tableauReport.html?userAccount="+userAccount+"&userName="+encodeURI(userName)+"&view="+view;
+
+_this.reporturl=encodeURI(reporturl);
+
+
+				
+				var reportname=_this.GetQueryString("reportname");
+				_this.reportname=decodeURI(reportname);
+			},
+			GetQueryString:function (name) { //获取url
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) return decodeURI(r[2]); return null;
+			}
+		},
+		mounted:function(){//初始化获取数据
+			//do get 报表
+			this.getsumorder();
+		}
+	})
+</script>
+</html>

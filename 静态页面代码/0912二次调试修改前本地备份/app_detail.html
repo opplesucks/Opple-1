@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/vue.min.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		html,body{
+			border:0px;
+			margin:0px;
+			padding:0px;
+			height: 100%;
+			/*安卓字体,苹果字体,微软字体*/
+			font-family: 'Source Han Sans','Noto Sans CJK','PingFang SC','微软雅黑', '黑体','宋体',Arial;
+			font-size: 20px;	
+		}
+		.container{
+			width: 100%;
+			height: 100%;
+			/*background-color:#0f9aef;*/
+		}
+		/*header*/
+		.header{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+			font-size: 24px;
+			color: #fff;
+			background-color: #0079fe;
+			text-align: center;
+			position: fixed;
+			top: 0;
+		}
+		.header .signtitle{
+			display: inline-block;
+			margin-left: -36px;
+		}
+		.header .fa-angle-left{
+			float: left;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 42px;
+			font-size: 36px;
+		}
+		/*主要内容区域*/
+		.main{
+			height: auto;
+			width: 100%;
+			min-height: calc(100vh - 60px);
+			padding-top: 60px;
+		}
+		.main .mainiframe{
+			height: auto;
+			width: 100%;
+			min-height: calc(100vh - 70px);
+		}
+	</style>      
+</head>
+<body>
+	<div class="container" id="container">
+		<div class="header">
+			<span class="fa fa-angle-left"></span>
+			<span class="signtitle">报表test01</span>
+			<span class="userinfor"></span>
+		</div>	
+		<div class="main">
+			<iframe class="mainiframe" src="https://www.baidu.com/" frameborder="0"></iframe>
+		</div>
+	</div>
+</body>
+<script>
+</script>
+</html>

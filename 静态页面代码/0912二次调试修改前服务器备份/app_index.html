@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/vue.min.js"></script>
+	<style>
+		/*深蓝#0079fe----------浅蓝#0f9aef*/
+		*{
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		html,body{
+			border:0px;
+			margin:0px;
+			padding:0px;
+			height: 100%;
+			/*安卓字体,苹果字体,微软字体*/
+			font-family: 'Source Han Sans','Noto Sans CJK','PingFang SC','微软雅黑', '黑体','宋体',Arial;
+			font-size: 20px;	
+		}
+		.container{
+			width: 100%;
+			height: 100%;
+			background-color: #fbfbfb;
+		}
+		/*header*/
+		.header{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+			font-size: 24px;
+			color: #fff;
+			background-color: #0079fe;
+			text-align: center;
+			position: fixed;
+			top: 0;
+		}
+		.header .signtip{
+			display: inline-block;
+			height: 60px;
+			line-height: 60px;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+		}
+		.header .signtip img{
+			vertical-align: middle;
+			-ms-transform: translateY(-50%);
+			width: 100%;
+		}
+		/*主要内容区域*/
+		.main{
+			height: auto;
+			width: 100%;
+			min-height: calc(100vh - 70px);
+			padding-top: 70px;
+		}
+		.maincontent{
+			width: 100%;
+			margin: 10px auto 20px;
+		}
+		.maincontent ul{
+
+		}
+		.maincontent ul li{
+		    width: 100%;
+		    margin: 10px 0px;
+		    padding: 16px 3px;
+		    display: flex;
+		    align-items: center;
+		    box-sizing: border-box;
+		    justify-content: space-around;
+		    border-bottom: 1px solid #0079fe;
+		}
+		.maincontent ul li .orderlist{
+			width: 30%;
+		}
+		.orderlist .orderlistdiv{
+			text-align: center;
+		}
+		.orderlist .orderlistdiv img{
+			height: 60px;
+		}
+		.orderlist .orderlistname{
+			text-align: center;
+			/*color: #fff;*/
+		}
+	</style>      
+</head>
+<body>
+	<div class="container" id="container">
+		<div class="header">
+			<span class="signtip"><img src="img/logo01.png" alt=""></span>
+		</div>
+		<div class="main">
+			<div class="maincontent">
+				<ul>
+					<li>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test01</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test02</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test03</div>
+						</div>
+					</li>
+					<li>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test04</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test05</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test06</div>
+						</div>
+					</li>
+					<li>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test07</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test08</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test09</div>
+						</div>
+					</li>
+					<li>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test10</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test11</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test12</div>
+						</div>
+					</li>
+					<li>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test13</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test14</div>
+						</div>
+						<div class="orderlist">
+							<div class="orderlistdiv"><img src="img/file.png" alt=""></div>
+							<div class="orderlistname">菜单test15</div>
+						</div>
+					</li>
+
+<!-- 					<li>
+						<span class="fa fa-lightbulb-o lightleft"></span>
+						<span class="orderlistli">报表test02</span>
+						<span class="fa fa-long-arrow-right arrowright"></span>
+					</li>
+					<li>
+						<span class="fa fa-lightbulb-o lightleft"></span>
+						<span class="orderlistli">报表test03</span>
+						<span class="fa fa-long-arrow-right arrowright"></span>
+					</li>
+					<li>
+						<span class="fa fa-lightbulb-o lightleft"></span>
+						<span class="orderlistli">报表test04</span>
+						<span class="fa fa-long-arrow-right arrowright"></span>
+					</li> -->
+
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+</script>
+</html>

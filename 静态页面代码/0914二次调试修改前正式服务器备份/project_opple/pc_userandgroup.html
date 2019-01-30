@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="css/pc_userandgroup.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/vue.min.js"></script>
+	<style>
+		
+	</style>      
+</head>
+<body>
+	<div class="container" id="container">
+		<div class="header">
+			<div class="headertip headerlogo"><img src="img/logo01.png" alt=""></div>
+			<div class="headertip headerlist">
+				<span class="hrefname hrefnamecurrent">用户组管理</span>
+				<span class="hrefname">菜单权限管理</span>
+				<span class="hrefname">菜单报表映射</span>
+			</div>
+			<div class="headertip headeruser">admin</div>
+		</div>
+		<div class="main">
+			<div class="maincontent">
+				<ul>
+					<li>
+						<div class="dotip">操作&nbsp;:</div>
+					</li>
+					<li class="groupli">
+						<span class="dotiptitle">用户组&nbsp;:</span>
+						<select name="groupslt" id="groupslt" v-model="groupsltsigle" @change="getgroupslt(groupsltsigle)">
+							<option id="-1" value="请选择">--请选择--</option>
+							<option v-for="gitem in sumgroup" v-bind:id="gitem.id" v-bind:value="gitem.groupName">{{gitem.groupName}}</option>
+						</select>
+					</li>
+					<li class="userli">
+						<span class="dotiptitle">用户&nbsp;:</span>
+						<div class="setuser">
+							<div class="premDatalist premDatalistleft premManlistleft">
+								<div class="setcont">
+									<input type="checkbox" v-model="setallputleft" value="setallputleft" id="setallputleft" @change="setallleftchange()">全选/全不选
+								</div>
+								<div class="premManlistleft">
+									<ul>
+										<li v-for="leftitem in leftalldataarr">
+											<input type="checkbox" v-bind:id="leftitem.id"  v-bind:value="leftitem.userAccount" class="setsigle" v-model="leftalldata">
+											<span class="setsigletitle" v-bind:id="leftitem.id">{{leftitem.userAccount}}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="premDatalist premDatalistsel premManlistsel">
+								<div class="addbtn" @click="additem()">></div>
+								<div class="removebtn" @click="removeitem()"><</div>
+							</div>
+							<div class="premDatalist premDatalistright premManlistright">
+								<div class="setcont">
+									<input type="checkbox" v-model="setallputright" value="setallputright" id="setallputright" @change="setallrightchange()">全选/全不选
+								</div>
+								<div class="premManlistleft">
+									<ul>
+										<li v-for="rightitem in rightalldataarr">
+											<input type="checkbox" v-bind:id="rightitem.id"  v-bind:value="rightitem.userAccount" class="setsigle" v-model="rightalldata">
+											<span class="setsigletitle" v-bind:id="rightitem.id">{{rightitem.userAccount}}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="saveli">
+						<div class="bottomdiv truesave" @click="savedata()" >保存</div>
+						<div class="bottomdiv trueback">返回</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		$(".hrefname").hover(function(){
+			$(this).addClass("highbackground");
+		},function(){
+			$(this).removeClass("highbackground");
+		})
+
+		$(".hrefname").on("click",function(){
+			if(!$(this).hasClass("hrefnamecurrent")){
+				if($(this).html().indexOf("用户组管理")>=0){
+
+					window.location.href="pc_userandgroup.html";
+
+				}else if($(this).html().indexOf("菜单权限管理")>=0){
+
+					window.location.href="pc_orderquery.html";
+
+				}else if($(this).html().indexOf("菜单报表映射")>=0){
+
+					window.location.href="pc_reportmanager.html";
+				}
+			}
+		})
+
+		$(".trueback").on("click",function(){
+			window.location.href="pc_index.html";
+		})
+	})
+
+	//vue 开始构建
+	new Vue({
+		el: '#container',
+		data:{
+			groupsltsigle:"请选择",
+			sumgroup:[],//select 人员组
+			setallputleft:false,
+			leftalldata:[],//左边选中数据
+			leftalldataarr:[],//左边原始数据
+			setallputright:false,
+			rightalldata:[],//右边选中数据
+			rightalldataarr:[],//右边原始数据
+			alldataarr:[],//左边原始数据,对应请选择时
+		},
+		methods:{
+			getsumgroup:function(){
+				//用户组
+				var _this=this;
+				var getgroupul="/sso/userGroup/getList";
+				$.ajax({
+					url: getgroupul,
+					type: "post",
+					dataType: "json",
+					data: {
+						start: 0,
+						rows: 3
+					},
+					success: function (arr) {
+						if(arr.success==true){
+							var sumgroup=arr.data.details;
+							if(sumgroup.length>0){
+								_this.sumgroup=sumgroup;
+							}
+						}
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						alert("网络连接失败！！！");
+					}
+				});
+			},
+			getleftalldata:function(){
+				//用户
+				var _this=this;
+				var getleftuserul="/sso/user/getList";
+				$.ajax({
+					url: getleftuserul,
+					type: "post",
+					dataType: "json",
+					data: {
+						start: 0,
+						rows:20
+					},
+					success: function (arr) {
+						if(arr.success==true){
+							var leftalldataarr=arr.data.details;
+							if(leftalldataarr.length>0){
+								_this.leftalldataarr=leftalldataarr;
+								_this.alldataarr=leftalldataarr;
+							}
+						}
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						alert("网络连接失败！！！");
+					}
+				});
+			},
+			setallleftchange:function(){
+				if(this.setallputleft){
+					var leftalldata=[];
+					$.each(this.leftalldataarr,function(a,b){
+						leftalldata.push(b.userAccount);
+					});
+					this.leftalldata=leftalldata;
+				}else{
+					this.leftalldata=[];
+				}
+			},
+			setallrightchange:function(){
+				if(this.setallputright){
+					var rightalldata=[];
+					$.each(this.rightalldataarr,function(a,b){
+						rightalldata.push(b.userAccount);
+					});
+					this.rightalldata=rightalldata;
+				}else{
+					this.rightalldata=[];
+				}
+			},
+			additem:function(){
+				if(this.leftalldata.length!=0){
+					var additemarr=[];
+					var lastitemarr=[];
+					var leftalldata=this.leftalldata;
+					$.each(this.leftalldataarr,function(a,b){
+						if(leftalldata.indexOf(b.userAccount)>=0){
+							additemarr.push(b);//选中的,后续需要放在右边的
+						}else{
+							lastitemarr.push(b);//没被选中剩下的
+						}
+					});
+					this.leftalldataarr=lastitemarr;
+					this.leftalldata=[];
+					var rightalldataarr=this.rightalldataarr;
+					rightalldataarr=rightalldataarr.concat(additemarr);
+					this.rightalldataarr=rightalldataarr;
+					this.rightalldata=[];
+				}
+			},
+			removeitem:function(){
+				if(this.rightalldata.length!=0){
+					var additemarr=[];
+					var lastitemarr=[];
+					var rightalldata=this.rightalldata;
+					$.each(this.rightalldataarr,function(c,d){
+						if(rightalldata.indexOf(d.userAccount)>=0){
+							additemarr.push(d);//选中的,后续需要放在右边的
+						}else{
+							lastitemarr.push(d);//没被选中剩下的
+						}
+					});
+					this.rightalldataarr=lastitemarr;
+					this.rightalldata=[];
+					var leftalldataarr=this.leftalldataarr;
+					leftalldataarr=leftalldataarr.concat(additemarr);
+					this.leftalldataarr=leftalldataarr;
+					this.leftalldata=[];
+				}
+			},
+			watchdata:function(a){
+				if(a=="left"){
+					if(this.leftalldata.length!=0){
+						if(this.leftalldata.length==this.leftalldataarr.length){
+							this.setallputleft = true;
+						}else{
+							this.setallputleft = false;
+						}
+					}else if(this.leftalldata.length==0){
+						this.setallputleft = false;
+					}
+				}else if(a=="right"){
+					if(this.rightalldata.length!=0){
+						if(this.rightalldata.length==this.rightalldataarr.length){
+							this.setallputright = true;
+						}else{
+							this.setallputright = false;
+						}
+					}else if(this.rightalldata.length==0){
+						this.setallputright = false;
+					}
+				}				
+			},
+			getgroupslt:function(b){
+				//用户组
+				var _this=this;
+				var groupid=$("#groupslt option:selected").attr("id");
+				if(groupid=="-1"){
+					_this.setallputleft=false,
+					_this.leftalldataarr=_this.alldataarr;//左边原始数据
+					_this.leftalldata=[];//左边选中数据
+
+					_this.setallputright=false,
+					_this.rightalldataarr=[];//右边原始数据
+					_this.rightalldata=[];//右边选中数据
+				}else{
+					var getgroupslturl="/sso/userGroup/get";
+					$.ajax({
+						url: getgroupslturl,
+						type: "post",
+						dataType: "json",
+						data: {
+							groupId:groupid
+						},
+						success: function (arr) {
+							if(arr.success==true){
+								var otherUserList=arr.data.otherUserList;
+								var userList=arr.data.userList;
+
+								_this.setallputleft=false,
+								_this.leftalldataarr=otherUserList;//左边原始数据
+								_this.leftalldata=[];//左边选中数据
+
+								_this.setallputright=false,
+								_this.rightalldataarr=userList;//右边原始数据
+								_this.rightalldata=[];//右边选中数据
+							}
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							alert("网络连接失败！！！");
+						}
+					});						
+				}
+			},
+			savedata:function(){
+				//用户组
+				var _this=this;
+				var savegroupurl="/sso/userGroup/update";
+				var groupid=$("#groupslt option:selected").attr("id");
+				if(groupid=="-1"){
+					alert("哎呀！您还没选择用户组,请选择！");
+				}else{
+					var rightallarr=[];
+					$.each(_this.rightalldataarr,function(e,f){
+						rightallarr.push(f.id);
+					})
+					var rightallarrstr=rightallarr.toString();
+					$.ajax({
+						url: savegroupurl,
+						type: "post",
+						dataType: "json",
+						data: {
+							groupId: groupid,
+							userIdList: rightallarrstr,
+							activity:"Enabled",
+						},
+						success: function (arr) {
+							if(arr.success==true){
+								alert("保存成功啦！");
+							}
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							alert("网络连接失败！！！");
+						}
+					});
+				}
+			}
+		},
+		mounted:function(){//初始化获取数据
+			//do get ajax group
+			this.getsumgroup();
+			//do get ajax user
+			this.getleftalldata();
+		},
+		watch:{//监听数据的变化
+			"leftalldata":function(){
+				this.watchdata("left");	
+			},
+			"leftalldataarr":function(){
+				this.watchdata("left");
+			},
+			"rightalldata":function(){
+				this.watchdata("right");
+			},
+			"rightalldataarr":function(){
+				this.watchdata("right");
+			}
+		}
+	})
+
+
+</script>
+</html>

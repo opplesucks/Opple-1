@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/vue.min.js"></script>
+	<style>
+		/*深蓝#0079fe----------浅蓝#0f9aef*/
+		*{
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		html,body{
+			border:0px;
+			margin:0px;
+			padding:0px;
+			height: 100%;
+			/*安卓字体,苹果字体,微软字体*/
+			font-family: 'Source Han Sans','Noto Sans CJK','PingFang SC','微软雅黑', '黑体','宋体',Arial;
+			font-size: 20px;	
+		}
+		.container{
+			width: 100%;
+			height: 100%;
+			background-color: #fbfbfb;
+		}
+		/*header*/
+		.header{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+			font-size: 24px;
+			color: #fff;
+			background-color: #0079fe;
+			text-align: center;
+			position: fixed;
+			top: 0;
+		}
+		.header .signtip{
+			display: inline-block;
+			height: 60px;
+			line-height: 60px;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+		}
+		.header .signtip img{
+			vertical-align: middle;
+			-ms-transform: translateY(-50%);
+			width: 100%;
+		}
+		/*主要内容区域*/
+		.main{
+			height: auto;
+			width: 100%;
+			min-height: calc(100vh - 70px);
+			padding-top: 70px;
+		}
+		.maincontent{
+			width: 80%;
+			margin: 10px auto 20px;
+		}
+		.maincontent ul{
+
+		}
+		.maincontent ul li{
+			width: 100%;
+			margin: 10px 0px;
+			padding: 16px 3px;
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+			justify-content: space-around;
+			border-bottom: 1px solid #0079fe;
+			align-items: flex-start;
+		}
+		.maincontent ul li .orderlist{
+			width: 30%;
+			cursor: pointer;
+		}
+		.orderlist .orderlistdiv{
+			text-align: center;
+		}
+		.orderlist .orderlistdiv img{
+			height: 60px;
+		}
+		.orderlist .orderlistname{
+			text-align: center;
+			/*color: #fff;*/
+		}
+		[v-clock]{
+			display: none;
+		}
+	</style>      
+</head>
+<body>
+	<div class="container" id="container" v-clock>
+		<div class="header">
+			<span class="signtip"><img src="img/logo01.png" alt=""></span>
+		</div>
+		<div class="main">
+			<div class="maincontent">
+				<ul>
+					<li v-for="(val,index) in sumdatalength">
+						<div class="orderlist" v-for="i in 3" @click="hrefreport(sumorder[3*index].menuId)">
+							<div class="orderlistdiv"><img src="img/file.png" alt="" v-show="showthis(3*index+i)"></div>
+							<div class="orderlistname">{{showthis(3*index+i)?sumorder[3*index].menuName:""}}</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	//vue 开始构建
+	new Vue({
+		el: '#container',
+		data:{
+			sumorder:[],
+			sumdatalength:0,
+		},
+		methods:{
+			getsumorder:function(){
+				//菜单
+				var _this=this;
+				var getorderurl="/sso/Ssoauthentication";
+				var userid=_this.GetQueryString("token");
+				//var groupName=_this.GetQueryString("groupName");
+				if(userid){
+					//do nothing
+				}else{
+					window.location.href="./portal_login.html"
+				}
+
+				if(sessionStorage.getItem("userid")){
+					sessionStorage.removeItem("userid");
+					sessionStorage.setItem("userid",userid);
+				}else{
+					sessionStorage.setItem("userid",userid);
+				}
+
+				//if(sessionStorage.getItem("groupName")){
+					//sessionStorage.removeItem("groupName");
+					//sessionStorage.setItem("groupName",groupName);
+				//}else{
+					//sessionStorage.setItem("groupName",groupName);
+				//}
+				
+				if(userid){
+					$.ajax({
+						url: getorderurl,
+						type: "get",
+						dataType: "json",
+						data: {
+							token:userid,
+						},
+						success: function (arr) {
+							
+							if(arr.success==true){
+								var sumorder=arr.data;
+								if(sumorder.length>0){
+									_this.sumorder=sumorder;
+									_this.sumdatalength=Math.ceil(sumorder.length/3);
+									console.log(_this.sumdatalength);
+								}
+							}
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							alert("网络连接失败！！！");
+						}
+					});
+				}
+			},
+			showthis:function(kval){
+				if(this.sumdatalength >= kval){
+					return true;
+				}else{
+					return false;
+				}
+			},
+			hrefreport:function(menuid){//去对应的报表清单页面
+				window.location.href="./portal_report.html?menuid="+menuid;
+			},
+			GetQueryString:function (name) { //获取url
+			 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			 	var r = window.location.search.substr(1).match(reg);
+			 	if (r != null) return decodeURI(r[2]); return null;
+			}
+		},
+		mounted:function(){//初始化获取数据
+			//do get ajax 菜单
+			this.getsumorder();
+		}
+	})
+</script>
+</html>

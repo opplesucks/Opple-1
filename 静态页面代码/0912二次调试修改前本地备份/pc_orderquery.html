@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="css/pc_orderquery.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/vue.min.js"></script>
+	<style>
+		.sub{
+			position: fixed;
+			top: 49px;
+			background-color: #0f9aef;
+			width: 100%;
+			height: 40px;
+			line-height: 40px;
+			color: #fff;
+			font-size: 17px;
+			min-width: 1100px;
+		}
+		.tab{
+			width: 80%;
+			margin: 0 auto;
+		}
+		.submanger{
+			background-color: #0f9aef;
+			display: inline-block;
+			height: 40px;
+			line-height: 40px;
+			padding-left: 20px;
+			padding-right: 20px;
+			cursor: pointer;
+		}
+		.subcurrent{
+			background-color: #2473ca;
+		}
+		.groupli .normaltalfather{
+			display: inline-block;
+			width: 80%;
+		}
+		.groupli table{
+			/*border-color:#0f9aef;*/
+			width: 80%;
+			max-width: 566px;
+			min-width: 456px;
+			margin-left: 50px;
+		}
+		.groupli table th,.groupli table td{
+			padding: 10px;
+			text-align: center;
+			border-bottom: 1px dashed #0f9aef;
+		}
+		.groupli table .thfirst{
+			width: 60%;
+		}
+		.groupli table .thsecond{
+			width: 24%;
+		}
+		.groupli table .ththree{
+			color: #2473ca;
+			cursor: pointer;
+		}
+		.groupli table .ththree .fa-plus{
+			color: #0f9aef;
+		}
+		.deletetr{
+			cursor: pointer;
+		}
+		.fide{
+			position: absolute;
+			z-index: 9999999;
+			background-color: #000;
+			background-color: rgba(0, 0, 0, 0.4);
+			width: 100vw;
+			height: 100vh;
+			top: 0px;
+			min-width: 1100px;
+		}
+		.fidecontent{
+			width: 40%;
+			max-width: 360px;
+			min-width: 345px;
+			height: 200px;
+			background-color: #fff;
+			opacity: 1;
+			margin: 0 auto;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+			border: 1px solid #0f9aef;
+			text-align: center;
+		}
+		.newCorrect_close {
+			vertical-align: middle;
+			color: #aaa;
+			float: right;
+			font-size: 27px;
+			margin-top: 0px;
+			margin-right: 12px;
+			width: 18px;
+			text-align: center;
+			cursor: pointer;
+		}
+		.newCorrect_insert {
+			vertical-align: middle;
+			display: inline-block;
+			margin-top: 50px;
+		}
+		.insert_button {
+			width: 97%;
+			padding: 5px;
+			margin-left: 5px;
+			margin-top: 30px;
+		}
+		.newCorrect_insert .newCorrect_title {
+			display: inline-block;
+			width: 46px;
+			text-align: center;
+			margin-right: 10px;
+		}
+		.newCorrect_insert div input {
+			width: 246px;
+			box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			height: 28px;
+			line-height: 28px;
+			font-size: 14px!important;
+		}
+		.insert_button .titlebottom {
+			display: inline-block;
+			width: 90px;
+			height: 30px;
+			line-height: 30px;
+			margin: 0px 5px;
+			margin-left: 30px;
+			display: inline-block;
+			cursor: pointer;
+			color: #fff;
+			background-color: #71b9f5;
+			border-radius: 2px;
+			box-shadow: 0px 0px 6px #ccc;
+			-webkit-box-shadow: 0px 0px 6px #ccc;
+			text-align: center;
+		    font-size: 16px;
+		}
+		[v-clock]{
+			display: none;
+		}
+	</style>      
+</head>
+<body>
+	<div class="container" id="container" v-clock>
+		<div class="header">
+			<div class="headertip headerlogo"><img src="img/logo01.png" alt=""></div>
+			<div class="headertip headerlist">
+				<span class="hrefname ">用户组管理</span>
+				<span class="hrefname hrefnamecurrent">菜单权限管理</span>
+				<span class="hrefname">菜单报表映射</span>
+			</div>
+			<div class="headertip headeruser">admin</div>
+		</div>
+		<div class="sub">
+			<div class="tab">
+				<span class="submanger normalmanger subcurrent">菜单基础维护</span>
+				<span class="submanger formalmanger">菜单权限映射</span>
+			</div>
+		</div>
+		<div class="main">
+			<div class="formalmaincontent">
+				<ul>
+					<li>
+						<div class="dotip">操作&nbsp;:</div>
+					</li>
+					<li class="orderli">
+						<span class="dotiptitle">菜单&nbsp;:</span>
+						<select name="orderslt" id="orderslt" v-model="ordersltsigle" @change="getorderslt(ordersltsigle)">
+							<option id="-1" value="请选择">--请选择--</option>
+							<option v-for="oitem in sumorder" v-bind:id="oitem.menuId" v-bind:value="oitem.menuName">{{oitem.menuName}}</option>
+						</select>
+					</li>
+					<li class="groupli">
+						<span class="dotiptitle">用户组&nbsp;:</span>
+						<div class="setgroup">
+							<div class="premDatalist premDatalistleft premManlistleft">
+								<div class="setcont">
+									<input type="checkbox" v-model="setallputleft" value="setallputleft" id="setallputleft" @change="setallleftchange()">全选/全不选
+								</div>
+								<div class="premManlistleft">
+									<ul>
+										<li v-for="leftitem in leftalldataarr">
+											<input type="checkbox" v-bind:id="leftitem.id"  v-bind:value="leftitem.groupName" class="setsigle" v-model="leftalldata">
+											<span class="setsigletitle" v-bind:id="leftitem.id">{{leftitem.groupName}}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="premDatalist premDatalistsel premManlistsel">
+								<div class="addbtn" @click="additem()">></div>
+								<div class="removebtn" @click="removeitem()"><</div>
+							</div>
+							<div class="premDatalist premDatalistright premManlistright">
+								<div class="setcont">
+									<input type="checkbox" v-model="setallputright" value="setallputright" id="setallputright" @change="setallrightchange()">全选/全不选
+								</div>
+								<div class="premManlistleft">
+									<ul>
+										<li v-for="rightitem in rightalldataarr">
+											<input type="checkbox" v-bind:id="rightitem.id"  v-bind:value="rightitem.groupName" class="setsigle" v-model="rightalldata">
+											<span class="setsigletitle" v-bind:id="rightitem.id">{{rightitem.groupName}}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="saveli">
+						<div class="bottomdiv truesave" @click="savedata()" >保存</div>
+						<div class="bottomdiv trueback">返回</div>
+					</li>
+				</ul>
+			</div>
+			<div class="normalmaincontent">
+				<ul>
+					<li>
+						<div class="dotip">操作&nbsp;:</div>
+					</li>
+					<li class="groupli">
+						<span class="dotiptitle">菜单维护&nbsp;:</span>
+						<div class="normaltalfather">
+							<table cellspacing="0">
+								<tr>
+									<th class="thfirst">菜单名</th>
+									<th class="thsecond">操作</th>
+									<th class="ththree" @click="addorder()"><span class="fa fa-plus"></span>&nbsp;添加</th>
+								</tr>
+								<tr v-for="noritem in sumorder" v-bind:id="noritem.menuId" v-bind:menuName="noritem.menuName">
+									<td>{{noritem.menuName}}</td>
+									<td>
+										<span class="deletetr" @click="deletemenu(noritem.menuId)">删除</span>
+									</td>
+									<td></td>
+								</tr>
+							</table>
+						</div>
+					</li>
+					<li class="saveli">
+						<div class="bottomdiv trueback">返回</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="fide" v-show="fideshow" @click="closeotherfide($event)">
+			<div class="fidecontent">
+				<span class="newCorrect_close titleclear" @click="closefide()">x</span>
+				<div class="newCorrect_insert">
+					<div>
+						<span class="newCorrect_title">名称:</span>
+						<input class="themeName" type="text" value="" />
+					</div>
+					<div class="insert_button">
+						<span class="titlebottom titleSave" @click="saveaddorder()">保存</span>
+						<span class="titlebottom titleclear" @click="closefide()">取消</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		$(".hrefname").hover(function(){
+			$(this).addClass("highbackground");
+		},function(){
+			$(this).removeClass("highbackground");
+		})
+
+		$(".hrefname").on("click",function(){
+			if(!$(this).hasClass("hrefnamecurrent")){
+				if($(this).html().indexOf("用户组管理")>=0){
+
+					window.location.href="pc_userandgroup.html";
+
+				}else if($(this).html().indexOf("菜单权限管理")>=0){
+
+					window.location.href="pc_orderquery.html";
+
+				}else if($(this).html().indexOf("菜单报表映射")>=0){
+
+					window.location.href="pc_reportmanager.html";
+				}
+			}
+		})
+
+		$(".submanger").on("click",function(){
+			$(this).addClass("subcurrent").siblings("span.submanger").removeClass("subcurrent");
+			if($(this).hasClass("normalmanger")){
+				$(".normalmaincontent").show();
+				$(".formalmaincontent").hide();
+			}else{
+				$(".normalmaincontent").hide();
+				$(".formalmaincontent").show();
+			}
+		})
+
+		$(".trueback").on("click",function(){
+			window.location.href="pc_index.html";
+		})
+	})
+
+	//vue 开始构建
+	new Vue({
+		el: '#container',
+		data:{
+			ordersltsigle:"请选择",
+			sumorder:[],//select 菜单
+			setallputleft:false,
+			leftalldata:[],//左边选中数据
+			leftalldataarr:[],//左边原始数据
+			setallputright:false,
+			rightalldata:[],//右边选中数据
+			rightalldataarr:[],//右边原始数据
+			alldataarr:[],//左边原始数据,对应请选择时
+			fideshow:false,//隐藏弹出层
+		},
+		methods:{
+			getsumorder:function(){
+				//菜单
+				var _this=this;
+				var getorderurl="/sso/menu/getallmenu";
+				$.ajax({
+					url: getorderurl,
+					type: "post",
+					dataType: "json",
+					data: {
+					},
+					success: function (arr) {
+						console.log(arr);
+						if(arr.success==true){
+							var sumorder=arr.data;
+							if(sumorder.length>0){
+								_this.sumorder=sumorder;
+							}
+						}
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						alert("网络连接失败！！！");
+					}
+				});
+			},
+			getleftalldata:function(){
+				//用户组
+				var _this=this;
+				var getgroupurl="/sso/userGroup/getList";
+				$.ajax({
+					url: getgroupurl,
+					type: "post",
+					dataType: "json",
+					data: {
+						start: 0,
+						rows:1000
+					},
+					success: function (arr) {
+						if(arr.success==true){
+							var leftalldataarr=arr.data.details;
+							if(leftalldataarr.length>0){
+								_this.leftalldataarr=leftalldataarr;
+								_this.alldataarr=leftalldataarr;
+							}
+						}
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						alert("网络连接失败！！！");
+					}
+				});
+			},
+			setallleftchange:function(){
+				if(this.setallputleft){
+					var leftalldata=[];
+					$.each(this.leftalldataarr,function(a,b){
+						leftalldata.push(b.groupName);
+					});
+					this.leftalldata=leftalldata;
+				}else{
+					this.leftalldata=[];
+				}
+			},
+			setallrightchange:function(){
+				if(this.setallputright){
+					var rightalldata=[];
+					$.each(this.rightalldataarr,function(a,b){
+						rightalldata.push(b.groupName);
+					});
+					this.rightalldata=rightalldata;
+				}else{
+					this.rightalldata=[];
+				}
+			},
+			additem:function(){
+				if(this.leftalldata.length!=0){
+					var additemarr=[];
+					var lastitemarr=[];
+					var leftalldata=this.leftalldata;
+					$.each(this.leftalldataarr,function(a,b){
+						if(leftalldata.indexOf(b.groupName)>=0){
+							additemarr.push(b);//选中的,后续需要放在右边的
+						}else{
+							lastitemarr.push(b);//没被选中剩下的
+						}
+					});
+					this.leftalldataarr=lastitemarr;
+					this.leftalldata=[];
+					var rightalldataarr=this.rightalldataarr;
+					rightalldataarr=rightalldataarr.concat(additemarr);
+					this.rightalldataarr=rightalldataarr;
+					this.rightalldata=[];
+				}
+			},
+			removeitem:function(){
+				if(this.rightalldata.length!=0){
+					var additemarr=[];
+					var lastitemarr=[];
+					var rightalldata=this.rightalldata;
+					$.each(this.rightalldataarr,function(c,d){
+						if(rightalldata.indexOf(d.groupName)>=0){
+							additemarr.push(d);//选中的,后续需要放在右边的
+						}else{
+							lastitemarr.push(d);//没被选中剩下的
+						}
+					});
+					this.rightalldataarr=lastitemarr;
+					this.rightalldata=[];
+					var leftalldataarr=this.leftalldataarr;
+					leftalldataarr=leftalldataarr.concat(additemarr);
+					this.leftalldataarr=leftalldataarr;
+					this.leftalldata=[];
+				}
+			},
+			watchdata:function(a){
+				if(a=="left"){
+					if(this.leftalldata.length!=0){
+						if(this.leftalldata.length==this.leftalldataarr.length){
+							this.setallputleft = true;
+						}else{
+							this.setallputleft = false;
+						}
+					}else if(this.leftalldata.length==0){
+						this.setallputleft = false;
+					}
+				}else if(a=="right"){
+					if(this.rightalldata.length!=0){
+						if(this.rightalldata.length==this.rightalldataarr.length){
+							this.setallputright = true;
+						}else{
+							this.setallputright = false;
+						}
+					}else if(this.rightalldata.length==0){
+						this.setallputright = false;
+					}
+				}				
+			},
+			getorderslt:function(b){
+				//菜单变化
+				var _this=this;
+				var menuid=$("#orderslt option:selected").attr("id");
+				
+				if(menuid=="-1"){
+					_this.setallputleft=false,
+					_this.leftalldataarr=_this.alldataarr;//左边原始数据
+					_this.leftalldata=[];//左边选中数据
+
+					_this.setallputright=false,
+					_this.rightalldataarr=[];//右边原始数据
+					_this.rightalldata=[];//右边选中数据
+				}else{
+					var getorderslturl="/sso/menu/getUserBymenu";
+					$.ajax({
+						url: getorderslturl,
+						type: "post",
+						dataType: "text",
+						data: {
+							menuid:menuid
+						},
+						success: function (arr) {
+							var arr=JSON.parse(arr);
+							if(arr.success==true){
+								var otheruserlist=arr.data.otheruserlist;
+								var userlist=arr.data.userlist;
+
+								_this.setallputleft=false,
+								_this.leftalldataarr=otheruserlist;//左边原始数据
+								console.log(otheruserlist);
+								console.log(_this.leftalldataarr);
+								_this.leftalldata=[];//左边选中数据
+
+								_this.setallputright=false,
+								_this.rightalldataarr=userlist;//右边原始数据
+								_this.rightalldata=[];//右边选中数据
+							}
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							alert("网络连接失败！！！");
+						}
+					});						
+				}
+			},
+			savedata:function(){
+				//用户组
+				var _this=this;
+				var saveorderurl="/sso/menu/adduserpermission";
+				var menuid=$("#orderslt option:selected").attr("id");
+				if(menuid=="-1"){
+					alert("哎呀！您还没选择菜单,请选择！");
+				}else{
+					var rightallarr=[];
+					$.each(_this.rightalldataarr,function(e,f){
+						rightallarr.push(f.id);
+					})
+					var rightallarrstr=rightallarr.toString();
+					console.log(menuid);
+					console.log(rightallarrstr);
+					$.ajax({
+						url: saveorderurl,
+						type: "post",
+						dataType: "json",
+						data: {
+							menuId: menuid,
+							groupId: rightallarrstr
+						},
+						success: function (arr) {
+							if(arr.success==true){
+								alert("保存成功啦！");
+							}
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							alert("网络连接失败！！！");
+						}
+					});
+				}
+			},
+			addorder:function(){//添加菜单
+				this.fideshow=true;
+			},
+			closefide:function(){
+				this.fideshow=false;
+			},
+			closeotherfide:function(event){//点击以外区域关闭弹窗
+				var clicksum=0;
+				var btn = document.querySelector(".fidecontent");
+                if(btn){
+                    if(!btn.contains(event.target)){//以外的区域
+                        this.fideshow = false;
+                    }
+                }
+			},
+			saveaddorder:function(){
+				//保存新建菜单
+				var _this=this;
+				var saveaddorderurl="/sso/menu/addmenu";
+				var menuName=$(".themeName").val().trim();
+				if(menuName){
+					$.ajax({
+						url: saveaddorderurl,
+						type: "post",
+						dataType: "json",
+						data: {
+							menuName: menuName
+						},
+						success: function (arr) {
+							if(arr.success==true){
+								alert("保存成功啦！");
+								_this.fideshow=false;
+								$(".themeName").val("");
+								_this.getsumorder();
+							}
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							alert("网络连接失败！！！");
+						}
+					});
+				}else{
+					alert("您还没填写菜单名,请先填写哟！")
+				}
+			},
+			deletemenu:function(mid){
+				if(window.confirm("确认删除？")){
+					//删除菜单
+					var _this=this;
+					var delorderurl="/sso/menu/delmenu";
+					$.ajax({
+						url: delorderurl,
+						type: "post",
+						dataType: "json",
+						data: {
+							menuid: mid
+						},
+						success: function (arr) {
+							if(arr.success==true){
+								alert("删除成功啦！");
+								window.location.href=window.location.href;
+							}
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							alert("网络连接失败！！！");
+						}
+					});	
+				}
+			}
+		},
+		mounted:function(){//初始化获取数据
+			//do get ajax 菜单
+			this.getsumorder();
+			//do get ajax user用户组
+			this.getleftalldata();
+		},
+		watch:{//监听数据的变化
+			"leftalldata":function(){
+				this.watchdata("left");	
+			},
+			"leftalldataarr":function(){
+				this.watchdata("left");
+			},
+			"rightalldata":function(){
+				this.watchdata("right");
+			},
+			"rightalldataarr":function(){
+				this.watchdata("right");
+			}
+		}
+	})
+</script>
+</html>

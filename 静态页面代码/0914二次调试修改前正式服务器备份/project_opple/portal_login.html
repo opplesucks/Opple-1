@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<style>
+		/*深蓝#0079fe----------浅蓝#0f9aef*/
+		*{
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		html,body{
+			border:0px;
+			margin:0px;
+			padding:0px;
+			height: 100%;
+			/*安卓字体,苹果字体,微软字体*/
+			font-family: 'Source Han Sans','Noto Sans CJK','PingFang SC','微软雅黑', '黑体','宋体',Arial;
+			font-size: 20px;	
+		}
+		.container{
+			width: 100%;
+			height: 100%;
+			background-color:#0f9aef;
+			min-width: 1000px;
+		}
+		/*header*/
+		.header{
+			width: 100%;
+			height: 60px;
+			font-size: 20px;
+			color: #fff;
+			background-color: #0079fe;
+			text-align: center;
+		}
+		.header .signtip{
+			display: inline-block;
+			height: 100%;
+			border:0px;
+			position: relative;
+			vertical-align: middle;
+		}
+		.header .signtip img{
+			vertical-align: middle;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+			-ms-transform: translateY(-50%);
+			width: 100%;
+		}
+		/*主要内容区域*/
+		.main{
+			width: 100%;
+		}
+		.maincontent{
+			width: 80%;
+			margin: 130px auto;
+			padding: 20px;
+		}
+		@media screen and (max-width:900px){
+			.maincontent {
+				max-width: 400px;
+				min-width: 550px;
+			}
+		}
+		@media screen and (min-width:900px) and (max-width:1200px){
+			.maincontent {
+				max-width: 520px;
+				min-width: 550px;
+			}
+		}
+		@media screen and (min-width:1200px) and (max-width:1400px){
+			.maincontent {
+				max-width: 550px;
+				min-width: 550px;
+			}
+		}
+		@media screen and (min-width:1400px) and (max-width:1600px){
+			.maincontent {
+				max-width: 600px;
+				min-width: 550px;
+			}
+		}
+		@media screen and (min-width:1600px) and (max-width:1800px){
+			.maincontent {
+				max-width: 650px;
+				min-width: 550px;
+			}
+		}
+		@media screen and (min-width:1800px){
+			.maincontent {
+				max-width: 700px;
+				min-width: 550px;
+			}
+		}
+		.userxinxi{
+			border: 2px solid #0079fe;
+			height: 42px;
+			border-radius: 4px;
+			background-color: #0079fe;
+		}
+		.userxinxi span{
+		    font-size: 30px;
+		    color: #fff;
+		    -webkit-text-stroke: 1px #0079fe;
+		    width: 18%;
+		    min-width: 30px;
+		    text-align: center;
+		    height: 42px;
+		    line-height: 42px;
+		    vertical-align: middle;
+		    float: left;
+		}
+		.userxinxi .myinput{
+		    outline: none;
+		    height: 42px;
+		    padding: 0px;
+		    line-height: 42px;
+		    margin: 0px;
+		    vertical-align: top;
+		    width: 80%;
+		    padding-left: 5px;
+		    background-color: #fbfbfb;
+		    float: right;
+		}
+		.maincontent .password{
+			margin-top:36px;
+		}
+		/*控制placeholder*/
+		.myinput::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+			color:  #0079fe;
+			font-style:italic;
+		}
+
+		.myinput:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+			color:  #0079fe;
+			opacity:  1;
+			font-style:italic;
+		}
+		.myinput::-moz-placeholder { /* Mozilla Firefox 19+ */
+			color:  #0079fe;
+			opacity:  1;
+			font-style:italic;
+		}
+		.myinput:-ms-input-placeholder { /* Internet Explorer 10-11 */
+			color:  #0079fe;
+			font-style:italic;
+		}
+		/*提交*/
+		.submit{
+		    height: 40px;
+		    line-height: 40px;
+		    background-color: #0079fe;
+		    color: #fff;
+		    text-align: center;
+		    cursor: pointer;
+		    margin-top: 36px;
+		    border-radius: 4px;
+		    padding-left: 60px;
+		}
+		.submit span{
+			float: right;
+			margin-top: 10px;
+			padding-right: 20px;
+			width: 60px;
+		}
+	</style>      
+</head>
+<body>
+	<div class="container" id="container">
+		<div class="header">
+			<span class="signtip"><img src="img/logo01.png" alt=""></span>
+		</div>	
+		<div class="main">
+			<div class="maincontent">
+				<div class="username userxinxi">
+					<span class="fa fa-user"></span>
+					<input class="usernameput myinput" type="text" placeholder="请输入您的用户名" />
+				</div>
+				<div class="password userxinxi">
+					<span class="fa fa-lock"></span>
+					<input class="passwordput myinput" type="password" placeholder="请输入您的密码" />
+				</div>
+				<div class="submit">登&nbsp;&nbsp;&nbsp;&nbsp;录<span class="fa fa-long-arrow-right"></span></div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$(function () {
+		if(sessionStorage.getItem("userid")){
+			sessionStorage.removeItem("userid")
+		}
+		if(sessionStorage.getItem("group")){
+			sessionStorage.removeItem("group")
+		}
+
+		//输入框的出入效果
+		$('.userxinxi>.myinput').focus(function () {
+			$(this).attr("placeholder", "");
+		}).blur(function () {
+			if($(this).hasClass("usernameput")){
+				$(this).attr("placeholder", "请输入您的用户名");
+			}else{
+				$(this).attr("placeholder", "请输入您的密码");
+			}
+		});
+
+		$(".submit").on("click",function(){
+			//登录
+			var staticUrl = "/sso/user/login/ad";
+			var username=$(".usernameput").val();
+			var password=$(".passwordput").val();
+			$.ajax({
+				url: staticUrl,
+				type: "post",
+				async: false,
+				dataType: "text",
+				data: {
+					username:username,
+					password:password
+				},
+				success: function (arr) {
+					var arr=JSON.parse(arr);
+                    if(arr.success==true){
+                    	var userAccount=arr.data.user.userAccount;
+						sessionStorage.setItem("userAccount",userAccount);
+
+                    	window.location.href="./portal_index.html?loginid="+userAccount;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                	alert("请输入正确的用户名或密码");
+                }
+            });
+		})
+		
+	});
+
+	  //获取url
+	  function GetQueryString(name) {
+	  	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	  	var r = window.location.search.substr(1).match(reg);
+	  	if (r != null) return decodeURI(r[2]); return null;
+	  }
+	</script>
+	</html>

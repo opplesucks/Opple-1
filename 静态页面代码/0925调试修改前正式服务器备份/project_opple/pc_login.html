@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>欧普照明</title>
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/vue.min.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		html,body{
+			border:0px;
+			margin:0px;
+			padding:0px;
+			height: 100%;
+			/*安卓字体,苹果字体,微软字体*/
+			font-family: 'Source Han Sans','Noto Sans CJK','PingFang SC','微软雅黑', '黑体','宋体',Arial;
+			font-size: 14px;	
+		}
+		.container{
+			width: 100%;
+			height: 100%;
+			background-color: #ccc;
+			min-width: 600px;
+			background: url(img/ptloginbg.jpg);
+			background-size: cover;
+			background-position: center;
+		}
+		.maincontent{
+			background-color: #fff;
+			display: inline-block;
+			padding: 10px 0px;
+			position: absolute;
+			top: 50%;
+			right: 8%;
+			transform: translateY(-68%);
+			border-radius: 6px;
+		}
+		.logintitle,.loginmid,.logindis{
+			
+		}
+		.logintitle{
+			padding: 0px 16px 10px 16px;
+			border-bottom: 1px solid #ccc;
+		}
+		.logintitle img{
+			vertical-align: middle;
+			height: 20px;
+		}
+		.logintitle span{
+			vertical-align: middle;	
+			font-size: 15px;		
+		}
+		.loginmid{
+			padding: 0px 16px 10px 16px;
+		}
+		.loginmid .labelname{
+			width: 30px;
+			height: 30px;
+			border-right: 1px solid #bdbdbd;
+			background: url(img/E.png) no-repeat;
+			background-position: center;
+			background-size: 69% 69%;
+			display: inline-block;
+			background-color: #e6e6e6;
+			float: left;
+		}
+		.loginmid .labelpassword{
+			width: 30px;
+			height: 30px;
+			border-right: 1px solid #bdbdbd;
+			background: url(img/F.png) no-repeat;
+			background-position: center;
+			background-size: 69% 69%;
+			display: inline-block;
+			background-color: #e6e6e6;
+			float: left;
+		}
+		.loginmid input{
+			padding: 0px;
+			margin: 0px;
+			vertical-align: middle;
+			height: 20px;
+			float: left;
+			overflow: hidden;
+			height: 26px;
+			line-height: 26px;
+			padding: 2px 20px;
+			border-bottom-right-radius: 8px;
+			border-top-right-radius: 8px;
+			outline: none;
+		}
+		.loginmid input:-webkit-autofill{
+			background-color: #fff!important;
+		}
+		.loginmid .userxinxi{
+			vertical-align: middle;
+			height: 30px;
+			line-height: 30px;
+			border: 1px solid #ccc;
+			margin: 20px 0px;
+			border-radius: 6px;
+			padding: 0px 0px;
+			/*background-color: #faffbd;*/
+		}
+		.loginmid .submit{
+			vertical-align: middle;
+			height: 30px;
+			line-height: 30px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			text-align: center;
+			background-color: #0079fe;
+			color: #fff;
+			cursor:pointer;
+			padding: 0px 10px;
+		}
+		.logindis{
+			padding: 5px 16px 0px 16px;
+			text-align: center;
+			color: #ccc;
+		}
+		.logopcity{
+			height: 100px;
+		}
+		.logopcity img{
+			height: 100px;
+		}
+	</style>      
+</head>
+<body>
+	<div class="container" id="container">
+		<div class="maincontent">
+			<div class="logintitle">
+				<img src="img/D.png" alt="">
+				<span>欢迎登录</span>
+			</div>
+			<div class="loginmid">
+				<div class="username userxinxi">
+					<label for="loginname" class="labelname"></label>
+					<input class="usernameput myinput" type="text" placeholder="请输入您的用户名" autocomplete="off"/>
+				</div>
+				<div class="password userxinxi">
+					<label for="loginpassword" class="labelpassword"></label>
+					<input class="passwordput myinput" type="password" placeholder="请输入您的密码" autocomplete="off"/>
+				</div>
+				<div class="submit">登录</div>
+			</div>
+			<div class="logindis">
+				<span>输入任意用户名和密码即可</span>
+			</div>
+		</div>
+		<div class="logopcity"><img src="img/logopcity.png" alt=""></div>
+	</div>
+</body>
+<script>
+	$(function () {
+		//输入框的出入效果
+		$('.userxinxi>.myinput').focus(function () {
+			$(this).attr("placeholder", "");
+		}).blur(function () {
+			if($(this).hasClass("usernameput")){
+				$(this).attr("placeholder", "请输入您的用户名");
+			}else{
+				$(this).attr("placeholder", "请输入您的密码");
+			}
+		});
+
+		//登录
+		var staticUrl = "/WebProSite/HandlerLogin.ashx";
+		$(".submit").on("click",function(){
+			var username=$(".usernameput").val();
+			var password=$(".passwordput").val();
+			if(username=="admin"&&password=="abc123"){
+				sessionStorage.setItem("username",username);
+				window.location.href="./pc_index.html";
+			}else{
+				alert("请您输入正确的用户名或密码")
+			}
+		})
+		
+	});
+
+	  //获取url
+	  function GetQueryString(name) {
+	  	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	  	var r = window.location.search.substr(1).match(reg);
+	  	if (r != null) return decodeURI(r[2]); return null;
+	  }
+	</script>
+	</html>
+
